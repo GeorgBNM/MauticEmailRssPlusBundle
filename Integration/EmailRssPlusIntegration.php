@@ -4,13 +4,56 @@ declare(strict_types=1);
 
 namespace MauticPlugin\MauticEmailRssPlusBundle\Integration;
 
+use Mautic\CoreBundle\Helper\CacheStorageHelper; // QUESTO DEVE ESSERE CORRETTO
 use Mautic\PluginBundle\Integration\AbstractIntegration;
+use Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 
+use Doctrine\ORM\EntityManager;
+
 class EmailRssPlusIntegration extends AbstractIntegration
 {
+    public function __construct(
+        \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher,
+        \Mautic\CoreBundle\Helper\CacheStorageHelper $cacheStorageHelper,
+        \Doctrine\ORM\EntityManager $em,
+        \Symfony\Component\HttpFoundation\RequestStack $requestStack,
+        \Symfony\Component\Routing\RouterInterface $router,
+        \Symfony\Contracts\Translation\TranslatorInterface $translator,
+        \Psr\Log\LoggerInterface $logger,
+        \Mautic\CoreBundle\Helper\EncryptionHelper $encryptionHelper,
+        \Mautic\LeadBundle\Model\LeadModel $leadModel,
+        \Mautic\LeadBundle\Model\CompanyModel $companyModel,
+        \Mautic\CoreBundle\Helper\PathsHelper $pathsHelper,
+        \Mautic\CoreBundle\Model\NotificationModel $notificationModel,
+        \Mautic\LeadBundle\Model\FieldModel $fieldModel,
+        \Mautic\PluginBundle\Model\IntegrationEntityModel $integrationEntityModel,
+        \Mautic\LeadBundle\Model\DoNotContact $doNotContact,
+        \Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier $fieldsWithUniqueIdentifier
+    ) {
+        parent::__construct(
+            $dispatcher,
+            $cacheStorageHelper,
+            $em,
+            $requestStack,
+            $router,
+            $translator,
+            $logger,
+            $encryptionHelper,
+            $leadModel,
+            $companyModel,
+            $pathsHelper,
+            $notificationModel,
+            $fieldModel,
+            $integrationEntityModel,
+            $doNotContact,
+            $fieldsWithUniqueIdentifier
+        );
+    }
+
     public function getName(): string
     {
         return 'EmailRssPlus';

@@ -47,6 +47,10 @@ class TemplateModel extends FormModel
 
         if ($isNew) {
             $entity->setCreatedAt(new \DateTime());
+            $currentUser = $this->userHelper->getUser();
+            if ($currentUser) {
+                $entity->setCreatedBy($currentUser->getId());
+            }
         } else {
             $entity->setUpdatedAt(new \DateTime());
             $currentUser = $this->userHelper->getUser();

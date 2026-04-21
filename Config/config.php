@@ -100,6 +100,23 @@ return [
                 ],
             ],
         ],
+        'main' => [
+            'mautic.rssplus.menu.root' => [
+                'id'        => 'mautic_rssplus_root',
+                'iconClass' => 'ri-rss-fill',
+                'priority'  => 60,
+                'children'  => [
+                    'mautic.rssplus.menu.feeds' => [
+                        'route'    => 'mautic_rssplus_feed_index',
+                        'iconClass' => 'fa-list',
+                    ],
+                    'mautic.rssplus.menu.templates' => [
+                        'route'    => 'mautic_rssplus_template_index',
+                        'iconClass' => 'fa-file-text',
+                    ],
+                ],
+            ],
+        ],
     ],
 
     'services' => [
@@ -115,22 +132,22 @@ return [
             'mautic.integration.emailrssplus' => [
                 'class' => MauticPlugin\MauticEmailRssPlusBundle\Integration\EmailRssPlusIntegration::class,
                 'arguments' => [
-                    'event_dispatcher',
-                    'mautic.helper.cache_storage',
-                    'doctrine.orm.entity_manager',
-                    'session',
-                    'request_stack',
-                    'router',
-                    'translator',
-                    'monolog.logger.mautic',
-                    'mautic.helper.encryption',
-                    'mautic.lead.model.lead',
-                    'mautic.lead.model.company',
-                    'mautic.helper.paths',
-                    'mautic.core.model.notification',
-                    'mautic.lead.model.field',
-                    'mautic.plugin.model.integration_entity',
-                    'mautic.lead.model.dnc',
+                    'event_dispatcher',                              // 1
+                    'mautic.helper.cache_storage',                   // 2
+                    'doctrine.orm.entity_manager',                   // 3
+                    'request_stack',                                 // 4
+                    'router',                                        // 5
+                    'translator',                                    // 6
+                    'logger',                                        // 7
+                    'mautic.helper.encryption',                      // 8
+                    'mautic.lead.model.lead',                        // 9
+                    'mautic.lead.model.company',                     // 10
+                    'mautic.helper.paths',                           // 11
+                    'mautic.core.model.notification',                // 12
+                    'mautic.lead.model.field',                       // 13
+                    'mautic.plugin.model.integration_entity',        // 14
+                    'mautic.lead.model.dnc',                         // 15
+                    'mautic.lead.field.fields_with_unique_identifier' // 16
                 ],
             ],
         ],

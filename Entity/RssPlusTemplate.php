@@ -17,6 +17,7 @@ class RssPlusTemplate
     private $createdAt;
     private $updatedAt;
     private $updatedBy;
+    private $createdBy;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
     {
@@ -47,6 +48,11 @@ class RssPlusTemplate
 
         $builder->createField('updatedBy', 'integer')
             ->columnName('updated_by')
+            ->nullable()
+            ->build();
+
+        $builder->createField('createdBy', 'integer')
+            ->columnName('created_by')
             ->nullable()
             ->build();
     }
@@ -109,5 +115,26 @@ class RssPlusTemplate
     {
         $this->updatedBy = $updatedBy;
         return $this;
+    }
+
+    public function getCreatedBy(): ?int
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?int $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+        return $this;
+    }
+
+    /**
+     * Returns the user to be used for permissions.
+     *
+     * @return User|int
+     */
+    public function getPermissionUser()
+    {
+        return $this->getCreatedBy();
     }
 }

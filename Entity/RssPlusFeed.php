@@ -19,7 +19,7 @@ class RssPlusFeed
     private $button = '1';
     private $token = '0';
     private $createdAt;
-    private $createdBy;
+    private $createdBy; //ALTER TABLE rssplus_templates ADD created_by INT DEFAULT NULL;
     private $updatedBy;
 
     public static function loadMetadata(ORM\ClassMetadata $metadata): void
@@ -177,5 +177,15 @@ class RssPlusFeed
     {
         $this->updatedBy = $updatedBy;
         return $this;
+    }
+
+    /**
+     * Returns the user to be used for permissions.
+     *
+     * @return User|int
+     */
+    public function getPermissionUser()
+    {
+        return $this->getCreatedBy();
     }
 }

@@ -2,7 +2,6 @@
     "name": "aczepod/mautic-email-rss-plus-bundle-v7",
     "description": "Advanced RSS feed management for Mautic emails for mautic 7.x",
     "type": "mautic-plugin",
-    "version": "1.0.1",
     "license": "MIT",
     "authors": [
         {

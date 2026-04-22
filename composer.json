@@ -10,6 +10,9 @@
             "email": "antonio.carella@gmail.com"
         }
     ],
+    "extra": {
+        "install_directory_name": "MauticEmailRssPlusBundle"
+    },
     "require": {
         "php": ">=8.0",
         "mautic/core-lib": "^7.0"

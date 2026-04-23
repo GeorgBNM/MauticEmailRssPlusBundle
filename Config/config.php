@@ -5,8 +5,8 @@ declare(strict_types=1);
 return [
     'name'        => 'RSS Plus',
     'description' => 'Advanced RSS feed management for Mautic emails',
-    'version'     => '1.0.0',
-    'author'      => 'Frederik Wouters',
+    'version'     => '1.0.2',
+    'author'      => 'Frederik Wouters / aczepod',
     'icon'        => 'plugins/MauticEmailRssPlusBundle/Assets/rss-icon.png',
 
     'routes' => [
@@ -126,6 +126,15 @@ return [
                 'tags' => [
                     'kernel.event_subscriber',
                 ],
+            ],
+            'mautic.rssplus.email_token.subscriber' => [
+                'class'     => MauticPlugin\MauticEmailRssPlusBundle\EventListener\EmailTokenSubscriber::class,
+                'arguments' => [
+                    'mautic.rssplus.model.feed',
+                    'mautic.rssplus.model.template',
+                    'monolog.logger.mautic',
+                ],
+                'tags' => ['kernel.event_subscriber'],
             ],
         ],
         'integrations' => [

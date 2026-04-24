@@ -1,6 +1,8 @@
-# <img src="Assets/rss-icon.png" alt="RSS Plus Icon" width="100"/> Mautic Email RSS Plus Bundle v7
-
 <div align="center">
+  <img src="Assets/rss-icon.png" alt="RSS Plus Icon" width="100"/>
+  <br />
+  # Mautic Email RSS Plus Bundle v7
+  <br />
   <img src="https://img.shields.io/badge/PHP-8.2+-777BB4" alt="PHP 8.2+" />
   <img src="https://img.shields.io/badge/Mautic-7.x-4E5D9D" alt="Mautic 7" />
   <img src="https://img.shields.io/badge/Database-MySQL%20|%20MariaDB-00758F" alt="Database" />
@@ -58,7 +60,7 @@ git clone https://github.com/aczepod/MauticEmailRssPlusBundle.git
 ```
 ### Method 2: Composer
 ```bash
-composer require aczepod/mautic-email-rss-plus-bundle-v7 --prefer-source
+composer require aczepod/mautic-email-rss-plus-bundle-v7:dev-mautic7-compatibility --prefer-source
 ```
 ### Finalize Setup
 ```bash

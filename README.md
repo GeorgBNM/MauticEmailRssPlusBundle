@@ -1,8 +1,6 @@
-# Mautic Email RSS Plus Bundle v7
+# <img src="Assets/rss-icon.png" alt="RSS Plus Icon" width="100"/> Mautic Email RSS Plus Bundle v7
 
 <div align="center">
-  <img src="Assets/rss-icon.png" alt="RSS Plus Icon" width="100"/>
-  <br />
   <img src="https://img.shields.io/badge/PHP-8.2+-777BB4" alt="PHP 8.2+" />
   <img src="https://img.shields.io/badge/Mautic-7.x-4E5D9D" alt="Mautic 7" />
   <img src="https://img.shields.io/badge/Database-MySQL%20|%20MariaDB-00758F" alt="Database" />
@@ -41,6 +39,77 @@ Built for Mautic 7's Symfony 7 architecture, it uses pure **email-safe HTML temp
 
 ---
 
+## ⚙️ Advanced Token Syntax
+RSS Plus tokens support filter chaining and item limiting for maximum flexibility.
+Basic Syntax
+1234
+
+---
+
+## 🔢 Limiting RSS Items
+Control how many items are rendered per token directly in the token syntax:
+12
+You can also set a default limit per feed in the Feed configuration panel. The token-level limit overrides the feed-level setting.
+
+---
+
+## 🔤 Available Filters
+Filters are applied left-to-right. All filters are multibyte-safe (UTF-8) and email-safe.
+
+### 💡 Practical Examples
+Format a publication date
+```bash
+{pubDate|date:l, F j, Y}
+<!-- Output: Published: Monday, January 20, 2025 -->
+```
+
+Truncate and capitalize a title
+```bash
+{title|ucfirst|truncate:60}
+<!-- Output: "Breaking News: Major Update Released…" -->
+```
+
+Safe description with fallback
+```bash
+<p>{description|strip_tags|truncate:120|default:No description available}</p>
+```
+
+
+Create a URL slug from title
+```bash
+<a href="/article/{title|lower|replace: ,-\|replace:?,|url_encode}">Read</a>
+<!-- Output: /article/breaking-news-major-update -->
+```
+
+Format a price with currency
+```bash
+{price|round|number_format:2,.,€ } €
+<!-- Output: 1.234,50 € -->
+```
+
+Complex chaining
+```bash
+{title|trim|ucfirst|substr:0,40|escape}
+{pubDate|date_modify:+1 day|date:d/m/Y}
+```
+---
+
+## Important Notes
+<p>Order matters: Filters execute left-to-right. <strong>{title|upper|substr:0,10}</strong> is different from <strong>{title|substr:0,10|upper}</strong>.
+</p>
+<p>
+Escaping is automatic: All output is HTML-escaped by default for email safety. Use raw only if you trust the source and need to preserve HTML.
+</p>
+<p>
+Date parsing: The date filter uses strtotime(). Ensure your RSS pubDate is in a recognized format (RFC 2822, ISO 8601, etc.).
+</p>
+<p>
+Cache behavior: The RSS fetch cache includes the limit value. Changing the limit in a token will fetch fresh data.
+</p>
+<p>
+Performance: All filters are native PHP operations. Even with complex chaining, overhead is < 0.1ms per item.
+</p>
+
 ## 📦 Requirements
 | Component | Minimum Version |
 |-----------|-----------------|
@@ -60,7 +129,7 @@ git clone https://github.com/aczepod/MauticEmailRssPlusBundle.git
 ```
 ### Method 2: Composer
 ```bash
-composer require aczepod/mautic-email-rss-plus-bundle-v7:dev-mautic7-compatibility --prefer-source
+composer require aczepod/mautic-email-rss-plus-bundle-v7 --prefer-source
 ```
 ### Finalize Setup
 ```bash

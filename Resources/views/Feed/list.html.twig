@@ -18,6 +18,20 @@
                 'routeBase': 'rssplus_feed',
                 'langVar': 'rssplus.feed',
             }),
+            'bulk_actions': {
+                'target': '#feedTable',
+                'templateButtons': {
+                    'delete': (permissions['rssplus:feed:deleteown'] or permissions['rssplus:feed:deleteother'])
+                },
+                'customButtons': bulkActionsCustom|default([]),
+                'routeBase': 'rssplus_feed',
+                'langVar': 'rssplus:feed',
+            },
+            'page_actions': {
+                'templateButtons': {'new': permissions['rssplus:feed:create']},
+                'routeBase': 'rssplus_feed',
+                'langVar': 'rssplus:feed'
+            },
         }) -}}
             <div class="page-list">
                 {{ block('listResults') }}

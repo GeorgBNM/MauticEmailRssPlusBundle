@@ -15,6 +15,20 @@ class TemplateController extends FormController
 {
     public function indexAction(Request $request, PageHelperFactoryInterface $pageHelperFactory, int $page = 1): Response
     {
+        $permissions = $this->security->isGranted([
+            'rssplus:template:viewown',
+            'rssplus:template:viewother',
+            'rssplus:template:create',
+            'rssplus:template:editown',
+            'rssplus:template:editother',
+            'rssplus:template:deleteown',
+            'rssplus:template:deleteother',
+        ], 'RETURN_ARRAY');
+
+        if (!$permissions['rssplus:template:viewown'] && !$permissions['rssplus:template:viewother']) {
+            return $this->accessDenied();
+        }
+
         $this->setListFilters();
 
         $pageHelper = $pageHelperFactory->make('mautic.rssplus.template', $page);
@@ -67,6 +81,7 @@ class TemplateController extends FormController
                 'page'        => $page,
                 'limit'       => $limit,
                 'tmpl'        => $tmpl,
+                'permissions' => $permissions,
             ],
             'contentTemplate' => '@MauticEmailRssPlus/Template/list.html.twig',
             'passthroughVars' => [
@@ -261,6 +276,79 @@ class TemplateController extends FormController
                 'flashes' => $flashes,
             ])
         );
+    } 
+
+    /**
+     * Deletes a group of entities.
+     */
+    public function batchDeleteAction(Request $request): Response
+    {
+        $page      = $request->getSession()->get('mautic.rssplus.template.page', 1);
+        $returnUrl = $this->generateUrl('mautic_rssplus_template_index', ['page' => $page]);
+        $flashes   = [];
+
+        $postActionVars = [
+            'returnUrl'       => $returnUrl,
+            'viewParameters'  => ['page' => $page],
+            'contentTemplate' => 'MauticPlugin\MauticEmailRssPlusBundle\Controller\TemplateController::indexAction',
+            'passthroughVars' => [
+                'activeLink'    => '#mautic_rssplus_template_index',
+                'mauticContent' => 'rssplus_template',
+            ],
+        ];
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            $model = $this->getModel('rssplus.template');
+            \assert($model instanceof LeadModel);
+            $ids       = json_decode($request->query->get('ids', '{}'));
+            $deleteIds = [];
+
+            // Loop over the IDs to perform access checks pre-delete
+            foreach ($ids as $objectId) {
+                $entity = $model->getEntity($objectId);
+
+                if (null === $entity) {
+                    $flashes[] = [
+                        'type'    => 'error',
+                        'msg'     => 'mautic.core.error.notfound',
+                        'msgVars' => ['%id%' => $objectId],
+                    ];
+                } elseif (!$this->security->hasEntityAccess(
+                    'rssplus:template:deleteown',
+                    'rssplus:template:deleteother',
+                    $entity->getPermissionUser()
+                )
+                ) {
+                    $flashes[] = $this->accessDenied(true);
+                } elseif ($model->isLocked($entity)) {
+                    $flashes[] = $this->isLocked($postActionVars, $entity, 'rssplus.template', true);
+                } else {
+                    $deleteIds[] = $objectId;
+                }
+            }
+
+            // Delete everything we are able to
+            if (!empty($deleteIds)) {
+                $entities = $model->deleteEntities($deleteIds);
+
+                $flashes[] = [
+                    'type'    => 'notice',
+                    'msg'     => 'mautic.core.notice.batch_deleted',
+                    'msgVars' => [
+                        '%count%' => count($entities),
+                    ],
+                ];
+            }
+        } // else don't do anything
+
+        return $this->postActionRedirect(
+            array_merge(
+                $postActionVars,
+                [
+                    'flashes' => $flashes,
+                ]
+            )
+        );
     }
 
     public function executeAction(Request $request, $objectAction, $objectId = 0, $objectSubId = 0, $objectModel = ''): Response
@@ -269,6 +357,7 @@ class TemplateController extends FormController
             'new' => $this->newAction($request),
             'edit' => $this->editAction($request, (int) $objectId),
             'delete' => $this->deleteAction($request, (int) $objectId),
+            'batchDelete' => $this->batchDeleteAction($request),
             default => $this->accessDenied(),
         };
     }

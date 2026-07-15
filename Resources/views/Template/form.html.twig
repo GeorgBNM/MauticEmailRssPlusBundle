@@ -24,7 +24,62 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{ form_row(form.content) }}
-                        <p class="help-block">You can use tokens in the template to insert RSS field values. Available tokens: {title}, {link}, {description}, {category}, {pubDate}, {media}. Each selected RSS item will be rendered using this template with tokens replaced by actual values.</p>
+                        <strong>Legenda Token e Filtri:</strong><br>
+                        <dl class="row">
+                            <dt class="col-sm-3">Testo</dt>
+                            <dd class="col-sm-9">
+                                <p>
+                                    <code>ucfirst</code>, 
+                                    <code>title</code>, 
+                                    <code>upper</code>, 
+                                    <code>lower</code>, 
+                                    <code>trim</code>, 
+                                    <code>strip_tags</code>, 
+                                    <code>escape</code>, 
+                                    <code>default:val</code>
+                                </p>
+                            </dd>
+
+                            {#
+                                <dt class="col-sm-3">Another term</dt>
+                                <dd class="col-sm-9">This definition is short, so no extra paragraphs or anything.</dd>
+                            #}
+
+                            <dt class="col-sm-3">Stringhe</dt>
+                            <dd class="col-sm-9">
+                                <p>
+                                    <code>substr:start,len</code>, 
+                                    <code>truncate:len</code>, 
+                                    <code>replace:old,new</code>, 
+                                    <code>url_encode</code>, 
+                                    <code>nl2br</code>
+                                </p>
+                            </dd>
+
+                            <dt class="col-sm-3">Date</dt>
+                            <dd class="col-sm-9">
+                                <p>
+                                    <code>date:Y-m-d</code>, 
+                                    <code>date_modify:+7 days</code>
+                                </p>
+                            </dd>
+
+                            <dt class="col-sm-3">Numeri</dt>
+                            <dd class="col-sm-9">
+                                <p>
+                                    <code>number_format:dec,dec_sep,th_sep</code>, 
+                                    <code>round:precision</code>, 
+                                    <code>abs</code>
+                                </p>
+                            </dd>
+
+                            <dt class="col-sm-3">Esempi</dt>
+                            <dd class="col-sm-9">
+                                <p>
+                                    <code>{title|ucfirst|truncate:50}</code> | <code>{pubDate|date:d/m/Y}</code> | <code>{price|round|number_format:2,., }</code>
+                                </p>
+                            </dd>
+                        </dl>
                     </div>
                 </div>
             </div>
